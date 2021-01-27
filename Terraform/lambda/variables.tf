@@ -22,10 +22,11 @@ variable "users_table_stream_arn" {
   type = string
 }
 
-variable "signup_form_api_execution_arn" {
-  
+variable "signup_api_execution_arn" {
+  type = string
 }
 
 variable "dynamodb_table_name" {
   type = string
 }
+

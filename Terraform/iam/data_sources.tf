@@ -39,17 +39,20 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "signup_validation_role_policy_doc" {
   statement {
-    sid = "DynamoDb"
+    sid = "DynamoDb_CwLogs"
     actions = [
       "dynamodb:BatchGetItem",
       "dynamodb:PutItem",
       "dynamodb:GetItem",
-      "dynamodb:UpdateItem"
+      "dynamodb:UpdateItem",
+      "dynamodb:UpdateItem",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
     ]
-
     resources = [
-      var.dynamodb_table
-    ]
+      var.dynamodb_table,
+      "arn:aws:logs:${var.region}:${var.account}:*"    ]
   }
 }
 

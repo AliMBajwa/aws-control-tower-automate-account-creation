@@ -19,6 +19,11 @@ variable "region" {
   default = "eu-west-2"
 }
 
+variable "account" {
+  type = string
+  default = "707962309233"
+}
+
 variable "billing_mode" {
   type = string
   description = "Billing mode for the dynamodb table - valid values are 'PROVISIONED' and 'PAY_PER_REQUEST'."
