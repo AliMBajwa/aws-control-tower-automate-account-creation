@@ -29,7 +29,7 @@ resource "aws_lambda_permission" "invoke_signup_validation" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.signup_validation.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.signup_form_api_execution_arn}/*/*/*"
+  source_arn    = "${var.signup_api_execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_event_source_mapping" "recieve_dynamodb_events" {
@@ -41,23 +41,21 @@ resource "aws_lambda_event_source_mapping" "recieve_dynamodb_events" {
 
 // sign up lambda deployment 
 
-data "archive_file" "lambda_zip_file_int" {
-  type        = "zip"
-  output_path = "/tmp/lambda_zip_file_int.zip"
-  source {
-    content  = file("lambda_src/sign_up_lambda_func.py")
-    filename = "sign_up_lambda_func.py"
-  }
-}
-
 resource "aws_lambda_function" "signup_validation" {
-  filename         = data.archive_file.lambda_zip_file_int.output_path
-  function_name    = "SIGN_UP_HANDLER"
-  role             = var.signup_validation_role_arn
-  handler          = "sign_up_lambda_func.lambda_handler"
-  runtime          = "python2.7"
-  timeout          = 60
-  source_code_hash = data.archive_file.lambda_zip_file_int.output_base64sha256
+  function_name     = "${var.prefix}_signup_validation"
+  description       = "The lambda function which will validate events from API Gateway and create new users in DynamoDb account."
+  s3_bucket         = var.deployment_bucket
+  s3_key            = "signup_validator.zip"
+  s3_object_version = "LATEST"
+  role              = var.signup_validation_role_arn
+  handler           = "signup_validator.lambda_handler"
+  runtime           = "python3.8"
+
+  environment {
+    variables = {
+      TABLE_NAME = var.dynamodb_table_name
+    }
+  }
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {

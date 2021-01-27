@@ -1,5 +1,9 @@
-locals {
-  prefix = var.prefix
+variable "region"{
+  type = string
+}
+
+variable "account"{
+  type = string
 }
 
 variable "prefix" {
@@ -27,6 +31,14 @@ variable "signup_api_execution_arn" {
 }
 
 variable "dynamodb_table_name" {
+  type = string
+}
+
+variable "aws_api_gateway_rest_api_id"{
+  type = string
+}
+
+variable "aws_api_gateway_method_http_method"{
   type = string
 }
 

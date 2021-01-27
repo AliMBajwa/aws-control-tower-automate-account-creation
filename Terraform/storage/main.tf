@@ -5,7 +5,7 @@ resource "aws_dynamodb_table" "users" {
     stream_enabled = true
     stream_view_type = "NEW_AND_OLD_IMAGES"
     attribute {
-      name = "${var.prefix}_AccountName"
+      name = "AccountName"
       type = "S"
     }
 }
@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "deployment_bucket" {
 resource "aws_s3_bucket_object" "signup_validation_s3_object" {
   bucket = aws_s3_bucket.deployment_bucket.bucket
   key = "signup_validation.zip"
-  source = "./lambda_code/signup_validation.zip"
+  source = "./lambda_code/signup_validator.zip"
 }
 
 resource "aws_s3_bucket_object" "account_creation_s3_object" {

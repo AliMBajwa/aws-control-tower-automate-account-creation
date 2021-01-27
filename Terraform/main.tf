@@ -20,11 +20,6 @@ module "apigateway" {
   aws_api_gateway_rest_api_id = module.apigateway.aws_api_gateway_rest_api_id
 }
 
-module "cloudformation" {
-  source = "./cloudformation"
-  prefix = local.prefix
-}
-
 module "cloudwatch" {
   source = "./cloudwatch"
   prefix = local.prefix
@@ -44,13 +39,16 @@ module "iam" {
 module "lambda" {
   source                     = "./lambda"
   prefix                     = local.prefix
+  region                     = var.region
+  account                    = var.account
   deployment_bucket          = module.storage.deployment_bucket
   signup_validation_role_arn = module.iam.signup_validation_role_arn
   account_creation_role_arn  = module.iam.account_creation_role_arn
   signup_api_execution_arn   = module.apigateway.signup_api_execution_arn
   users_table_stream_arn     = module.storage.users_table_stream_arn
   dynamodb_table_name        = module.storage.dynamodb_table_name
-
+  aws_api_gateway_rest_api_id = module.apigateway.aws_api_gateway_rest_api_id
+  aws_api_gateway_method_http_method = module.apigateway.aws_api_gateway_method_http_method
 }
 
 module "storage" {
