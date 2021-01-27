@@ -8,6 +8,7 @@ resource "aws_iam_role" "signup_validation_role" {
 resource "aws_iam_role" "account_creation_role" {
   name = "${var.prefix}_account_creation_role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
+
 }
 
 #Custom Policies
@@ -26,6 +27,7 @@ resource "aws_iam_policy" "account_creation_policy" {
 #Role Policy Attachments
 
 resource "aws_iam_role_policy_attachment" "signup_validation_role_policy_attachment_main" {
+
   role = aws_iam_role.signup_validation_role.name
   policy_arn = aws_iam_policy.signup_validation_policy.arn
 }
@@ -36,6 +38,7 @@ resource "aws_iam_role_policy_attachment" "signup_validation_role_policy_attachm
 }
 
 resource "aws_iam_role_policy_attachment" "account_creation_role_policy_attachment_main" {
+
   role = aws_iam_role.account_creation_role.name
   policy_arn = aws_iam_policy.signup_validation_policy.arn
 }
